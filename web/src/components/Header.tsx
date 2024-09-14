@@ -3,8 +3,17 @@ import logoImage from '../assets/logo.svg';
 import { Plus, X } from 'phosphor-react';
 import NewHabitForm from './NewHabitForm';
 
+interface IHeaderProps {
+    setShowHeader: (value: boolean) => void;
+  }
 
-const Header = () => {
+const Header = ({ setShowHeader }: IHeaderProps
+) => {
+    const handleLogOut = () => {
+        localStorage.clear();
+        setShowHeader(false);
+      };
+      
     return (
         <div className="w-full max-w-3xl mx-auto flex items-center justify-between">
             <img src={logoImage} alt="habits" />
