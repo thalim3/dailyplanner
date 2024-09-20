@@ -1,5 +1,5 @@
 import styled from "styled-components";
- 
+
 export const SingUpInputsContainer = styled.form`
   width: 350px;
   height: 300px;

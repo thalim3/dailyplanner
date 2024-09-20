@@ -67,14 +67,10 @@ const appRoutes = async (app: FastifyInstance) => {
         return reply.status(400).send({ message: "User not found." });
       }
 
-      console.log(user.password);
-
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
-      console.log(isPasswordValid);
-
       if (!isPasswordValid) {
-        return reply.status(400).send({ message: "Invalid password." });
+        return reply.status(400).send({ message: "Invalid user or password" });
       }
 
       return reply.status(200).send({ message: "Login successful!" });

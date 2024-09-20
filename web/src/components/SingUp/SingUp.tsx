@@ -1,31 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as S from "./SingUp.styles";
-import * as SLogin from "./Login.styles";
- 
+import * as SLogin from "../Login/Login.styles";
+
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-// import { Loading } from "../Loading/Loading";
-// import { AlertColor } from "@mui/material";
-// import { Alerts } from "../Alerts/Alerts";
- 
+import { Loading } from "../Loading/Loading";
+import { AlertColor } from "@mui/material";
+import { Alerts } from "../Alerts/Alerts";
+
 const url = "http://localhost:3333/register";
- 
-// interface IAlertProps {
-//   type: AlertColor;
-//   message: string;
-// }
- 
+
+interface IAlertProps {
+  type: AlertColor;
+  message: string;
+}
+
 export function SingUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAlet, setShowAlert] = useState(false);
-  //const [typeAlertAndMessage, setTypeALertAndMessage] = useState<IAlertProps>();
+  const [typeAlertAndMessage, setTypeALertAndMessage] = useState<IAlertProps>();
   const {
     register,
     handleSubmit,
     reset,
     formState: { isValid, isDirty },
   } = useForm();
- 
+
   const handleRegister = (data: unknown) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -34,30 +35,29 @@ export function SingUp() {
         .then((reponse) => {
           setIsLoading(false);
           setShowAlert(true);
-        //   setTypeALertAndMessage({
-        //     type: "success",
-        //     message: reponse.data.message,
-        //   });
+          setTypeALertAndMessage({
+            type: "success",
+            message: reponse.data.message,
+          });
           reset();
         })
         .catch((error: any) => {
           setIsLoading(false);
           setShowAlert(true);
-        //   setTypeALertAndMessage({
-        //     type: "error",
-        //     message: error.response.data.message,
-        //   });
+          setTypeALertAndMessage({
+            type: "error",
+            message: error.response.data.message,
+          });
         });
     }, 1000);
   };
- 
+
   return (
     <>
       <S.SingUpInputsContainer onSubmit={handleSubmit(handleRegister)}>
         {isLoading ? (
           <>
-          <></>
-            {/* <Loading /> */}
+            <Loading />
           </>
         ) : (
           <>
@@ -69,7 +69,7 @@ export function SingUp() {
                 {...register("name", { required: true })}
               ></SLogin.InputBase>
             </SLogin.InputContainer>
- 
+
             <SLogin.InputContainer>
               <SLogin.LabelContainer widthMargin={163}>
                 <SLogin.LabelBase>Last name</SLogin.LabelBase>
@@ -78,7 +78,7 @@ export function SingUp() {
                 {...register("lastname", { required: true })}
               ></SLogin.InputBase>
             </SLogin.InputContainer>
- 
+
             <SLogin.InputContainer>
               <SLogin.LabelContainer widthMargin={190}>
                 <SLogin.LabelBase>Email</SLogin.LabelBase>
@@ -87,7 +87,7 @@ export function SingUp() {
                 {...register("email", { required: true })}
               ></SLogin.InputBase>
             </SLogin.InputContainer>
- 
+
             <SLogin.InputContainer>
               <SLogin.LabelContainer widthMargin={163}>
                 <SLogin.LabelBase>Password</SLogin.LabelBase>
@@ -96,7 +96,7 @@ export function SingUp() {
                 {...register("password", { required: true })}
               ></SLogin.InputBase>
             </SLogin.InputContainer>
- 
+
             <SLogin.ButtonSubmitContainer>
               <SLogin.ButtonSubmit
                 widthMargin={10}
@@ -108,13 +108,13 @@ export function SingUp() {
           </>
         )}
       </S.SingUpInputsContainer>
-      {/* {showAlet && (
+      {showAlet && (
         <Alerts
           message={typeAlertAndMessage!.message}
           type={typeAlertAndMessage!.type}
           handleClose={() => setShowAlert(false)}
         />
-      )} */}
+      )}
     </>
   );
 }

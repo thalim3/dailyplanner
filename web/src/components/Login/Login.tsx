@@ -1,36 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { SingUp } from "./SingUp";
+import { SingUp } from "../SingUp/SingUp";
 import * as S from "./Login.styles";
+import { AlertColor } from "@mui/material";
+import { Alerts } from "../Alerts/Alerts";
 import { useForm } from "react-hook-form";
+import { Loading } from "../Loading/Loading";
 import axios from "axios";
-//import { AlertColor } from "@mui/material";
-//import { Alerts } from "../Alerts/Alerts";
-//import { useForm } from "react-hook-form";
-//import { Loading } from "../Loading/Loading";
-//import axios from "axios";
- 
+
 interface ILoginProps {
   setShowHeader: (value: boolean) => void;
 }
- 
-// interface IAlertProps {
-//   type: AlertColor;
-//   message: string;
-// }
+
+export interface IAlertProps {
+  type: AlertColor;
+  message: string;
+}
 const url = "http://localhost:3333/login";
- 
+
 export function Login({ setShowHeader }: ILoginProps) {
   const [showSingUp, setShowSingUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showAlet, setShowAlert] = useState(false);
-  //const [typeAlertAndMessage, setTypeALertAndMessage] = useState<IAlertProps>();
+  const [typeAlertAndMessage, setTypeALertAndMessage] = useState<IAlertProps>();
   const {
     register,
     handleSubmit,
     formState: { isValid, isDirty },
   } = useForm();
- 
+
   const handleButtonToggle = () => {
     if (showSingUp) {
       setShowSingUp(false);
@@ -38,7 +36,7 @@ export function Login({ setShowHeader }: ILoginProps) {
       setShowSingUp(true);
     }
   };
- 
+
   const HandleSubmit = (data: any) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -51,14 +49,14 @@ export function Login({ setShowHeader }: ILoginProps) {
         .catch((error: any) => {
           setIsLoading(false);
           setShowAlert(true);
-          // setTypeALertAndMessage({
-          //   type: "error",
-          //   message: error.response.data.message,
-          // });
+          setTypeALertAndMessage({
+            type: "error",
+            message: error.response.data.message,
+          });
         });
     }, 1000);
   };
- 
+
   return (
     <>
       <S.Container>
@@ -77,12 +75,11 @@ export function Login({ setShowHeader }: ILoginProps) {
               Sign up
             </S.ButtonToggle>
           </S.ButtonToggleContainer>
- 
+
           {!showSingUp && (
             <S.LoginInputsContainer onSubmit={handleSubmit(HandleSubmit)}>
               {isLoading ? (
-                <></>
-                //<Loading />
+                <Loading />
               ) : (
                 <>
                   <S.InputContainer>
@@ -95,7 +92,7 @@ export function Login({ setShowHeader }: ILoginProps) {
                       {...register("email", { required: true })}
                     />
                   </S.InputContainer>
- 
+
                   <S.InputContainer>
                     <S.LabelContainer widthMargin={173}>
                       <S.LabelBase>Password</S.LabelBase>
@@ -106,7 +103,7 @@ export function Login({ setShowHeader }: ILoginProps) {
                       {...register("password", { required: true })}
                     />
                   </S.InputContainer>
- 
+
                   <S.ButtonSubmitContainer>
                     <S.ButtonSubmit
                       widthMargin={60}
@@ -119,18 +116,18 @@ export function Login({ setShowHeader }: ILoginProps) {
               )}
             </S.LoginInputsContainer>
           )}
- 
+
           {showSingUp && <SingUp />}
         </S.FormContainer>
       </S.Container>
- 
-      {/* {showAlet && (
+
+      {showAlet && (
         <Alerts
           message={typeAlertAndMessage!.message}
           type={typeAlertAndMessage!.type}
           handleClose={() => setShowAlert(false)}
         />
-      )} */}
+      )}
     </>
   );
 }
