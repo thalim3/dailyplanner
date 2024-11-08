@@ -1,4 +1,4 @@
-# dailyplanner
+# dailyplanner - tag v2.
 Projeto realizado para a máteria Práticas Profissionais de Análise e Desenvolvimento de Sistemas da Universidade Presbiteriana Mackenzie.
 
 Segue abaixo as instruções detalhadas para conseguir executar a aplicação em seu computador: 
