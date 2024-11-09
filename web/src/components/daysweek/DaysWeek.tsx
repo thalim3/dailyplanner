@@ -3,13 +3,13 @@ import * as S from "./DaysWeek.styles";
 import { useState } from "react";
 
 const availableWeekDays = [
-  "Domingo",
-  "Segunda-feria",
+  "Segunda-feira",
   "Terça-feira",
   "Quarta-feira",
   "Quinta-feira",
   "Sexta-feira",
   "Sabado",
+  "Domingo",
 ];
 
 interface DaysWeekProps {
