@@ -74,7 +74,7 @@ export function NewHabitForm({ handleClose, open }: INewHabitFormProps) {
           <S.InputBase
             type="text"
             id="title"
-            placeholder="Ex.: Excercícios, dormir bem, etc..."
+            placeholder="Ex.: Atividade física, dormir cedo, meta de hidratação, etc..."
             autoFocus
             value={titles}
             onChange={(event) => setTitle(event.target.value)}
