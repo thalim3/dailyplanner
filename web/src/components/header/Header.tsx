@@ -32,14 +32,15 @@ export function Header({ setShowHeader }: IHeaderProps) {
           <S.IconColor>
             <Plus size={20} className="text-violet-500" />
           </S.IconColor>
-          New habit
+          Novo hábito
         </S.ButtonNewHabit>
       </S.ButtonContainer>
 
       <NewHabitForm
         open={shoeNewHabitFomr}
-        handleClose={() => setShowNewHabitForm(false)}
-      />
+        handleClose={() => setShowNewHabitForm(false)} handleSetPossiblesHabits={function (): void {
+          throw new Error("Function not implemented.");
+        } }      />
     </S.Container>
   );
 }

@@ -2,44 +2,39 @@ import Checkbox from "@mui/material/Checkbox";
 import * as S from "./DaysWeek.styles";
 import { useState } from "react";
 
-const availableWeekDays = [
-  "Domingo",
-  "Segunda-feria",
-  "Terça-feira",
-  "Quarta-feira",
-  "Quinta-feira",
-  "Sexta-feira",
-  "Sabado",
-];
-
 interface DaysWeekProps {
   handleSetWeekDays: (value: number[]) => void;
+  weekDates: Date[];
 }
 
-export function DaysWeek({ handleSetWeekDays }: DaysWeekProps) {
+export function DaysWeek({ handleSetWeekDays, weekDates }: DaysWeekProps) {
   const [weekDays, setWeekDays] = useState<number[]>([]);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-  const handleToggleWeekDays = (weekDay: number) => {
-    if (weekDays.includes(weekDay)) {
-      const weekDaysWithRemovedOne = weekDays.filter((day) => day !== weekDay);
-      setWeekDays(weekDaysWithRemovedOne);
-      handleSetWeekDays(weekDaysWithRemovedOne);
+  const handleToggleWeekDays = (dayIndex: number) => {
+    let updatedWeekDays;
+    if (weekDays.includes(dayIndex)) {
+      updatedWeekDays = weekDays.filter((day) => day !== dayIndex);
     } else {
-      const weekDaysWithAddedOne = [...weekDays, weekDay];
-      setWeekDays(weekDaysWithAddedOne);
-      handleSetWeekDays(weekDaysWithAddedOne);
+      updatedWeekDays = [...weekDays, dayIndex];
     }
+
+    setWeekDays(updatedWeekDays);
+    handleSetWeekDays(updatedWeekDays); 
   };
 
   return (
     <S.Container>
-      {availableWeekDays.map((weekDay, index) => {
+      {weekDates.map((date, index) => {
+        const dayName = date.toLocaleDateString("pt-BR", { weekday: "long" });
+
+        const adjustedIndex = index === 0 ? 1 : (index === 6 ? 0 : index + 1);
+
         return (
-          <S.CheckboxContainer key={weekDay}>
+          <S.CheckboxContainer key={index}>
             <Checkbox
               {...label}
-              defaultChecked={false}
+              checked={weekDays.includes(adjustedIndex)}
               sx={{
                 "&.Mui-checked": {
                   color: "#7c3aed",
@@ -51,9 +46,9 @@ export function DaysWeek({ handleSetWeekDays }: DaysWeekProps) {
                   borderWidth: 1,
                 },
               }}
-              onClick={() => handleToggleWeekDays(index)}
+              onClick={() => handleToggleWeekDays(adjustedIndex)}
             />
-            <S.SpanWeekDays>{weekDay}</S.SpanWeekDays>
+            <S.SpanWeekDays>{dayName}</S.SpanWeekDays>
           </S.CheckboxContainer>
         );
       })}

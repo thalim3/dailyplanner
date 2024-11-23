@@ -7,16 +7,15 @@ export const Container = styled.div`
   left: 50%;
   border-radius: 10px;
   transform: translate(-50%, -50%);
-  width: 300px;
+  width: 400px;
   height: 300px;
   overflow: auto;
-
   background-color: rgb(63 63 70);
 `;
 
 export const InfoContainer = styled.div`
   display: flex;
-  width: 320px;
+  width: 400px;
   flex-direction: column;
   padding: 1.5rem;
 `;

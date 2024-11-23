@@ -15,20 +15,21 @@ interface IButtoSubmit {
 export const Container = styled.div`
   display: flex;
   width: 100%;
+  height: 100vh;
   height: auto;
   align-items: center;
   justify-content: center;
 `;
 
 export const FormContainer = styled.div`
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   border: solid 1px rgb(63 63 70);
   border-radius: 20%;
   background-color: rgb(63 63 70);
-
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
 `;
@@ -50,7 +51,7 @@ export const ButtonToggle = styled.button<IButtonProps>`
 export const LoginInputsContainer = styled.form`
   width: 350px;
   height: 300px;
-  margin-top: 50px;
+  margin-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;

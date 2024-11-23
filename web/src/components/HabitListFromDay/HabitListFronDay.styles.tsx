@@ -8,13 +8,14 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin-top: 1.52rem;
+  margin-top: 1.72rem;
+  
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-
+  flex-wrap: wrap;
   gap: 10px;
   width: auto;
   height: 54px;

@@ -66,13 +66,13 @@ export function Login({ setShowHeader }: ILoginProps) {
               isActive={!showSingUp}
               onClick={() => handleButtonToggle()}
             >
-              Login
+              Entrar
             </S.ButtonToggle>
             <S.ButtonToggle
               isActive={showSingUp}
               onClick={() => handleButtonToggle()}
             >
-              Sign up
+              Cadastro
             </S.ButtonToggle>
           </S.ButtonToggleContainer>
 

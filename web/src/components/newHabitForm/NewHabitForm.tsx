@@ -1,8 +1,8 @@
 import { Modal } from "@mui/material";
 import * as S from "./NewHabitForm.style";
 import { X } from "phosphor-react";
-import { DaysWeek } from "../daysweek/DaysWeek";
-import { FormEvent, useState } from "react";
+import { DaysWeek } from "../daysweek/DaysWeek"; 
+import { FormEvent, useState, useEffect } from "react";
 import axios from "axios";
 import { Alerts } from "../Alerts/Alerts";
 import { IAlertProps } from "../Login/Login";
@@ -10,56 +10,96 @@ import { IAlertProps } from "../Login/Login";
 interface INewHabitFormProps {
   handleClose: () => void;
   open: boolean;
+  handleSetPossiblesHabits: (value: any) => void;
 }
 
-export function NewHabitForm({ handleClose, open }: INewHabitFormProps) {
-  const [titles, setTitle] = useState("");
-  const [weekDays, setWeekDays] = useState<number[]>([]);
-  const [showAlet, setShowAlert] = useState(false);
+export function NewHabitForm({ handleClose, open, handleSetPossiblesHabits }: INewHabitFormProps) {
+  const [titles, setTitle] = useState(""); 
+  const [weekDays, setWeekDays] = useState<number[]>([]);  
+  const [showAlert, setShowAlert] = useState(false);
   const [typeAlertAndMessage, setTypeALertAndMessage] = useState<IAlertProps>();
+  const [weekDates, setWeekDates] = useState<Date[]>([]);
+
+  const getWeekDates = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const dates: Date[] = [];
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(today);
+      day.setDate(today.getDate() + diffToMonday + i);
+      dates.push(day);
+    }
+
+    return dates;
+  };
+
+  useEffect(() => {
+    const dates = getWeekDates();
+    setWeekDates(dates); 
+  }, []);
 
   const createNewHabit = async (event: FormEvent) => {
     event.preventDefault();
+
     if (!titles || weekDays.length === 0) {
       setShowAlert(true);
       setTypeALertAndMessage({
         type: "warning",
-        message: "Fill in the fields: TITLE and RECURRENCE!",
+        message: "Preencha os campos: TÍTULO e RECORRÊNCIA!",
       });
-
       return;
     }
-    await axios
-      .post("http://localhost:3333/habits", {
-        titles,
-        weekDays,
-      })
-      .then(() => {
-        setShowAlert(true);
-        setTypeALertAndMessage({
-          type: "success",
-          message: "Habit successfully created!!",
-        });
 
-        setTimeout(() => {
-          setTitle("");
-          setWeekDays([]);
-          handleClose();
-        }, 1000);
-      })
-      .catch((error) => {
+    try {
+      const response = await axios.post("http://localhost:3333/habits", {
+        titles,
+        weekDays, 
+      });
+
+      handleSetPossiblesHabits((prevHabits: any) => [
+        ...prevHabits,
+        response.data,
+      ]);
+
+      setShowAlert(true);
+      setTypeALertAndMessage({
+        type: "success",
+        message: "Hábito adicionado",
+      });
+
+      setTimeout(() => {
+        setTitle(""); 
+        setWeekDays([]); 
+        handleClose(); 
+      }, 1000);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Erro no carregamento de hábito";
+
         setShowAlert(true);
         setTypeALertAndMessage({
           type: "error",
-          message: error.response.data.message,
+          message: errorMessage,
         });
+      } else {
+        setShowAlert(true);
+        setTypeALertAndMessage({
+          type: "error",
+          message: "Erro no carregamento de hábito",
+        });
+      }
 
-        setTimeout(() => {
-          setTitle("");
-          setWeekDays([]);
-          handleClose();
-        }, 1000);
-      });
+      setTimeout(() => {
+        setTitle(""); o
+        setWeekDays([]); 
+        handleClose(); 
+      }, 1000);
+    }
   };
 
   return (
@@ -69,23 +109,25 @@ export function NewHabitForm({ handleClose, open }: INewHabitFormProps) {
           <X size={14} aria-label="Fechar" />
         </S.ButtonClose>
         <S.FormContainer onSubmit={createNewHabit}>
-          <S.Title>Create a habit</S.Title>
-          <S.LabelBase isMaginTop={false}>What is your commitment?</S.LabelBase>
+          <S.Title>Novo Hábito</S.Title>
+          <S.LabelBase isMaginTop={false}>Qual o seu comprometimento?</S.LabelBase>
           <S.InputBase
             type="text"
             id="title"
-            placeholder="Ex.: Excercícios, dormir bem, etc..."
+            placeholder="Ex.: Exercícios, dormir bem, etc..."
             autoFocus
             value={titles}
             onChange={(event) => setTitle(event.target.value)}
           />
-          <S.LabelBase isMaginTop={true}>What is the recurrence?</S.LabelBase>
-          <DaysWeek handleSetWeekDays={setWeekDays} />
+          <S.LabelBase isMaginTop={true}>Qual a frequência?</S.LabelBase>
+          
+          <DaysWeek handleSetWeekDays={setWeekDays} weekDates={weekDates} />
+          
           <div>
-            <S.ButtonSubmit>Create</S.ButtonSubmit>
+            <S.ButtonSubmit>Confirmar</S.ButtonSubmit>
           </div>
         </S.FormContainer>
-        {showAlet && (
+        {showAlert && (
           <Alerts
             left={21}
             top={2}
