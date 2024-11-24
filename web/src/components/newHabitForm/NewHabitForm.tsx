@@ -53,10 +53,15 @@ export function NewHabitForm({ handleClose, open, handleSetPossiblesHabits }: IN
     }
 
     try {
+
+      console.log("Dados enviados para a API:", { titles, weekDays });
+
       const response = await axios.post("http://localhost:3333/habits", {
         titles,
-        weekDays, 
+        weekDays,
       });
+
+      console.log("Resposta da API:", response.data); 
 
       handleSetPossiblesHabits((prevHabits: any) => [
         ...prevHabits,
@@ -75,27 +80,27 @@ export function NewHabitForm({ handleClose, open, handleSetPossiblesHabits }: IN
         handleClose(); 
       }, 1000);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          error.message ||
-          "Erro no carregamento de hábito";
+      // Depuração do erro
+      console.error("Erro na requisição:", error); 
 
-        setShowAlert(true);
-        setTypeALertAndMessage({
-          type: "error",
-          message: errorMessage,
-        });
+      let errorMessage = "Hábito adicionado";
+
+      if (axios.isAxiosError(error)) {
+
+        console.error("Erro da API:", error.response);
+        errorMessage = error.response?.data?.message || error.message;
       } else {
-        setShowAlert(true);
-        setTypeALertAndMessage({
-          type: "error",
-          message: "Erro no carregamento de hábito",
-        });
+        console.error("Erro desconhecido:", error);
       }
 
+      setShowAlert(true);
+      setTypeALertAndMessage({
+        type: "error",
+        message: errorMessage,
+      });
+
       setTimeout(() => {
-        setTitle(""); o
+        setTitle(""); 
         setWeekDays([]); 
         handleClose(); 
       }, 1000);
